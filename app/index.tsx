@@ -1,107 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-interface Data {
-  activity: string,
-  type: string,
-  participants: number,
-  price: number,
-  link: string,
-  key: string,
-  accessibility: 0.3
-}
+import { Button } from '@/components/button';
+import { getRandomActivity } from '@/core/api';
+import type { Activity } from '@/core/types';
 
-const App = () => {
-  const [data, setData] = useState<Data>();
-  const [savedData, setSavedData] = useState<Data[]>([]);
+export default function Home() {
+  const [data, setData] = useState<Activity | null>(null);
+  const [savedData, setSavedData] = useState<Activity[]>([]);
 
   useEffect(() => {
-    fetchData();
+    fetchHandler();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('https://www.boredapi.com/api/activity');
-      const jsonData: Data = await response.json();
-      setData(jsonData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+  const fetchHandler = async () => {
+    const newData = await getRandomActivity();
+    setData(newData);
   };
 
-  const renderItem = ({ item }: { item: Data }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.itemText}>{item.activity}</Text>
-    </View>
-  );
+  const saveHandler = () => {
+    if (!data) return;
+    setSavedData([data, ...savedData]);
+  };
 
   return (
-    <View>
-      <Text style={{
-        fontSize: 22,
-        padding: 20,
-      }}>Random Activity</Text>
-      <Pressable
-        style={{
-            padding: 10,
-            backgroundColor: 'lightgray',
-            borderRadius: 10,
-            width: 200,
-          }}
-        onPress={() => {
-          fetchData();
-        }}
-      >
-        <Text>
-          Refresh
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.mainTitle}>
+          🚴🏻‍♂️ Need a random activity to do? here it is!
         </Text>
-      </Pressable>
-      <View style={{
-        padding: 12,
-      }}>
-        <Text>{data?.activity || '-'}</Text>
-        <Text>({data?.type})</Text>
-        <Pressable
-          style={{
-            padding: 10,
-            backgroundColor: 'lightgray',
-            borderRadius: 10,
-            width: 200,
-          }}
-          onPress={() => {
-            console.log('test')
-            setSavedData([...savedData, data])
-          }}
-        >
-          <Text>Save</Text>
-        </Pressable>
       </View>
-      <View style={{ padding: 12 }}>
-        <Text>Saved Data:</Text>
-        {savedData.map(data => (
-          <Text>{data.activity}</Text>
-        ))}
+
+      <View style={styles.activityContainer}>
+        <Text style={styles.activityType}>How about to do this 👇</Text>
+        <Text style={styles.activityTitle}>{data?.activity || '-'}</Text>
+        <Text style={styles.activityType}>A "{data?.type}" activity</Text>
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <Button onPress={() => fetchHandler()}>✨ Re-generate ✨</Button>
+        <Button
+          variant="outlined"
+          onPress={() => saveHandler()}
+        >
+          💾 Save this activity 💾
+        </Button>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
+    padding: 12,
+    width: '100%',
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 100,
+  },
+  mainTitle: {
+    fontSize: 16,
+    fontWeight: 'semibold',
+  },
+  activityContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
-  itemContainer: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  activityTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
-  itemText: {
+  activityType: {
     fontSize: 16,
   },
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: 12,
+  },
 });
-
-export default App;
