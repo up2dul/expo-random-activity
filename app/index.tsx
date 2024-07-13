@@ -1,47 +1,55 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { ActivityBox } from '@/components/activity-box';
 import { Button } from '@/components/button';
-import { getRandomActivity } from '@/core/api';
 import { colors, sizes } from '@/core/constants';
-import type { Activity } from '@/core/types';
+import { useActivitiesStore } from '@/stores/saved-activities';
 
 export default function Home() {
-  const [data, setData] = useState<Activity | null>(null);
-  const [savedData, setSavedData] = useState<Activity[]>([]);
+  const {
+    isLoading,
+    currentActivity,
+    loadCurrentActivity,
+    addSavedActivity,
+    clearSavedActivities,
+  } = useActivitiesStore();
 
   useEffect(() => {
-    fetchHandler();
+    loadCurrentActivity();
   }, []);
-
-  const fetchHandler = async () => {
-    const newData = await getRandomActivity();
-    setData(newData);
-  };
-
-  const saveHandler = () => {
-    if (!data) return;
-    setSavedData([data, ...savedData]);
-  };
 
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.mainTitle}>
-          🚴🏻‍♂️ Need a random activity to do? here it is!
+          😴 Imagine you have no idea what to do today.
+        </Text>
+        <Text style={styles.mainTitle}>
+          🎲 Let's generate a random activity for you!
         </Text>
       </View>
 
       <View style={styles.activitySection}>
-        <Text style={styles.activitySectionTitle}>How about to do this 👇</Text>
-        <ActivityBox data={data} />
+        <Text style={styles.activitySectionTitle}>
+          {isLoading
+            ? null
+            : currentActivity === null
+              ? 'Hit the Re-generate button'
+              : 'How about to do this? 👇'}
+        </Text>
+        <ActivityBox data={currentActivity} isLoading={isLoading} />
       </View>
 
       <View style={styles.actionsSection}>
-        <Button onPress={() => fetchHandler()}>✨ Re-generate ✨</Button>
-        <Button variant="outlined" onPress={() => saveHandler()}>
-          💾 Save this activity 💾
+        <Button isLoading={isLoading} onPress={() => loadCurrentActivity()}>
+          🎲 Re-generate
+        </Button>
+        <Button variant="outlined" onPress={() => addSavedActivity()}>
+          💾 Save this activity
+        </Button>
+        <Button variant="outlined" onPress={() => clearSavedActivities()}>
+          🗑️ Clear all
         </Button>
       </View>
     </View>
