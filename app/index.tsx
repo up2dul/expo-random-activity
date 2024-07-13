@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { ActivityBox } from '@/components/activity-box';
 import { Button } from '@/components/button';
-import { colors, sizes } from '@/core/constants';
+import { COLORS, SIZES } from '@/core/constants';
 import { useActivitiesStore } from '@/stores/saved-activities';
 
 export default function Home() {
@@ -58,27 +58,27 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: sizes.sm,
+    padding: SIZES.sm,
     flex: 1,
-    backgroundColor: colors.light,
-    color: colors.dark,
+    backgroundColor: COLORS.light,
+    color: COLORS.dark,
   },
   mainTitle: {
-    fontSize: sizes.md,
+    fontSize: SIZES.md,
     fontWeight: 'semibold',
   },
   activitySection: {
     flex: 1,
     justifyContent: 'center',
-    gap: sizes.md,
+    gap: SIZES.md,
   },
   activitySectionTitle: {
-    fontSize: sizes.md,
+    fontSize: SIZES.md,
     textAlign: 'center',
   },
   actionsSection: {
     flex: 1,
     flexDirection: 'column',
-    gap: sizes.sm,
+    gap: SIZES.sm,
   },
 });

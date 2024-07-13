@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, sizes } from '@/core/constants';
+import { COLORS, SIZES } from '@/core/constants';
 import type { Activity } from '@/core/types';
 
 type ActivityBoxProps = {
@@ -27,24 +27,24 @@ export const ActivityBox = ({ data, isLoading = false }: ActivityBoxProps) => {
 
 const styles = StyleSheet.create({
   box: {
-    paddingHorizontal: sizes.sm,
-    paddingVertical: sizes.xl,
+    paddingHorizontal: SIZES.sm,
+    paddingVertical: SIZES.xl,
     gap: 8,
-    backgroundColor: colors.primary,
-    borderColor: colors.dark,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.dark,
     borderWidth: 4,
     borderRadius: 8,
     borderStyle: 'dashed',
   },
   title: {
-    fontSize: sizes.xl,
+    fontSize: SIZES.xl,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: colors.dark,
+    color: COLORS.dark,
   },
   type: {
-    fontSize: sizes.md,
+    fontSize: SIZES.md,
     textAlign: 'center',
-    color: colors.paragraph,
+    color: COLORS.paragraph,
   },
 });
