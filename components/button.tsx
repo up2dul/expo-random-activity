@@ -5,12 +5,14 @@ import { colors, sizes } from '@/core/constants';
 
 type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> & {
   variant?: 'solid' | 'outlined';
+  isLoading?: boolean;
   children: React.ReactNode;
 };
 
 export const Button = ({
   onPress,
   variant = 'solid',
+  isLoading = false,
   children,
   ...rest
 }: ButtonProps) => {
@@ -23,7 +25,7 @@ export const Button = ({
       <Text
         style={variant === 'solid' ? styles.solidText : styles.outlinedText}
       >
-        {children}
+        {isLoading ? 'Loading...' : children}
       </Text>
     </Pressable>
   );
