@@ -1,107 +1,84 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-interface Data {
-  activity: string,
-  type: string,
-  participants: number,
-  price: number,
-  link: string,
-  key: string,
-  accessibility: 0.3
-}
+import { ActivityBox } from '@/components/activity-box';
+import { Button } from '@/components/button';
+import { COLORS, SIZES } from '@/core/constants';
+import { useActivitiesStore } from '@/stores/saved-activities';
 
-const App = () => {
-  const [data, setData] = useState<Data>();
-  const [savedData, setSavedData] = useState<Data[]>([]);
+export default function Home() {
+  const {
+    isLoading,
+    currentActivity,
+    loadCurrentActivity,
+    addSavedActivity,
+    clearSavedActivities,
+  } = useActivitiesStore();
 
   useEffect(() => {
-    fetchData();
+    loadCurrentActivity();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('https://www.boredapi.com/api/activity');
-      const jsonData: Data = await response.json();
-      setData(jsonData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-  const renderItem = ({ item }: { item: Data }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.itemText}>{item.activity}</Text>
-    </View>
-  );
-
   return (
-    <View>
-      <Text style={{
-        fontSize: 22,
-        padding: 20,
-      }}>Random Activity</Text>
-      <Pressable
-        style={{
-            padding: 10,
-            backgroundColor: 'lightgray',
-            borderRadius: 10,
-            width: 200,
-          }}
-        onPress={() => {
-          fetchData();
-        }}
-      >
-        <Text>
-          Refresh
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.mainTitle}>
+          😴 Imagine you have no idea what to do today.
         </Text>
-      </Pressable>
-      <View style={{
-        padding: 12,
-      }}>
-        <Text>{data?.activity || '-'}</Text>
-        <Text>({data?.type})</Text>
-        <Pressable
-          style={{
-            padding: 10,
-            backgroundColor: 'lightgray',
-            borderRadius: 10,
-            width: 200,
-          }}
-          onPress={() => {
-            console.log('test')
-            setSavedData([...savedData, data])
-          }}
-        >
-          <Text>Save</Text>
-        </Pressable>
+        <Text style={styles.mainTitle}>
+          🎲 Let's generate a random activity for you!
+        </Text>
       </View>
-      <View style={{ padding: 12 }}>
-        <Text>Saved Data:</Text>
-        {savedData.map(data => (
-          <Text>{data.activity}</Text>
-        ))}
+
+      <View style={styles.activitySection}>
+        <Text style={styles.activitySectionTitle}>
+          {isLoading
+            ? null
+            : currentActivity === null
+              ? 'Hit the Re-generate button'
+              : 'How about to do this? 👇'}
+        </Text>
+        <ActivityBox data={currentActivity} isLoading={isLoading} />
+      </View>
+
+      <View style={styles.actionsSection}>
+        <Button isLoading={isLoading} onPress={() => loadCurrentActivity()}>
+          🎲 Re-generate
+        </Button>
+        <Button variant="outlined" onPress={() => addSavedActivity()}>
+          💾 Save this activity
+        </Button>
+        <Button variant="outlined" onPress={() => clearSavedActivities()}>
+          🗑️ Clear all
+        </Button>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
+    padding: SIZES.sm,
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: COLORS.light,
+    color: COLORS.dark,
+  },
+  mainTitle: {
+    fontSize: SIZES.md,
+    fontWeight: 'semibold',
+  },
+  activitySection: {
+    flex: 1,
     justifyContent: 'center',
+    gap: SIZES.md,
   },
-  itemContainer: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  activitySectionTitle: {
+    fontSize: SIZES.md,
+    textAlign: 'center',
   },
-  itemText: {
-    fontSize: 16,
+  actionsSection: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: SIZES.sm,
   },
 });
-
-export default App;
