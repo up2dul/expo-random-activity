@@ -1,3 +1,5 @@
+export const ACTIVITY_KEY = '@activities';
+
 export const colors = {
   dark: '#232323',
   light: '#f8f5f2',
