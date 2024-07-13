@@ -1,6 +1,8 @@
 import type React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
+import { colors, sizes } from '@/core/constants';
+
 type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> & {
   variant?: 'solid' | 'outlined';
   children: React.ReactNode;
@@ -31,35 +33,34 @@ const baseStyles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
+    paddingVertical: sizes.sm,
+    paddingHorizontal: sizes.xl,
     borderRadius: 4,
     elevation: 3,
   },
   text: {
-    fontSize: 16,
-    lineHeight: 21,
+    fontSize: sizes.md,
     fontWeight: 'bold',
-    letterSpacing: 0.25,
   },
 });
 
 const styles = StyleSheet.create({
   solidButton: {
     ...baseStyles.button,
-    backgroundColor: 'black',
+    backgroundColor: colors.dark,
   },
   solidText: {
     ...baseStyles.text,
-    color: 'white',
+    color: colors.light,
   },
   outlinedButton: {
     ...baseStyles.button,
-    borderWidth: 1,
-    borderColor: 'black',
+    backgroundColor: colors.light,
+    borderWidth: 2,
+    borderColor: colors.dark,
   },
   outlinedText: {
     ...baseStyles.text,
-    color: 'black',
+    color: colors.dark,
   },
 });
