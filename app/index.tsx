@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { ActivityBox } from '@/components/activity-box';
 import { Button } from '@/components/button';
 import { getRandomActivity } from '@/core/api';
+import { colors, sizes } from '@/core/constants';
 import type { Activity } from '@/core/types';
 
 export default function Home() {
@@ -31,18 +33,14 @@ export default function Home() {
         </Text>
       </View>
 
-      <View style={styles.activityContainer}>
-        <Text style={styles.activityType}>How about to do this 👇</Text>
-        <Text style={styles.activityTitle}>{data?.activity || '-'}</Text>
-        <Text style={styles.activityType}>A "{data?.type}" activity</Text>
+      <View style={styles.activitySection}>
+        <Text style={styles.activitySectionTitle}>How about to do this 👇</Text>
+        <ActivityBox data={data} />
       </View>
 
-      <View style={styles.buttonsContainer}>
+      <View style={styles.actionsSection}>
         <Button onPress={() => fetchHandler()}>✨ Re-generate ✨</Button>
-        <Button
-          variant="outlined"
-          onPress={() => saveHandler()}
-        >
+        <Button variant="outlined" onPress={() => saveHandler()}>
           💾 Save this activity 💾
         </Button>
       </View>
@@ -52,32 +50,27 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
-    width: '100%',
+    padding: sizes.sm,
     flex: 1,
-    justifyContent: 'center',
-    gap: 100,
+    backgroundColor: colors.light,
+    color: colors.dark,
   },
   mainTitle: {
-    fontSize: 16,
+    fontSize: sizes.md,
     fontWeight: 'semibold',
   },
-  activityContainer: {
+  activitySection: {
     flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
+    gap: sizes.md,
   },
-  activityTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  activitySectionTitle: {
+    fontSize: sizes.md,
+    textAlign: 'center',
   },
-  activityType: {
-    fontSize: 16,
-  },
-  buttonsContainer: {
+  actionsSection: {
     flex: 1,
     flexDirection: 'column',
-    gap: 12,
+    gap: sizes.sm,
   },
 });
