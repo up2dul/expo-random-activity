@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 import { COLORS, SIZES } from '@/core/constants';
 
 type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> & {
-  variant?: 'solid' | 'outlined';
+  variant?: 'solid' | 'outlined' | 'danger';
   isLoading?: boolean;
   children: React.ReactNode;
 };
@@ -16,15 +16,25 @@ export const Button = ({
   children,
   ...rest
 }: ButtonProps) => {
+  const selectedStyles: typeof baseStyles = baseStyles;
+
+  switch (variant) {
+    case 'outlined':
+      selectedStyles.button = styles.outlinedButton;
+      selectedStyles.text = styles.outlinedText;
+      break;
+    case 'danger':
+      selectedStyles.button = styles.dangerButton;
+      selectedStyles.text = styles.dangerText;
+      break;
+    default:
+      selectedStyles.button = styles.solidButton;
+      selectedStyles.text = styles.solidText;
+  }
+
   return (
-    <Pressable
-      style={variant === 'solid' ? styles.solidButton : styles.outlinedButton}
-      onPress={onPress}
-      {...rest}
-    >
-      <Text
-        style={variant === 'solid' ? styles.solidText : styles.outlinedText}
-      >
+    <Pressable style={selectedStyles.button} onPress={onPress} {...rest}>
+      <Text style={selectedStyles.text}>
         {isLoading ? 'Loading...' : children}
       </Text>
     </Pressable>
@@ -64,5 +74,13 @@ const styles = StyleSheet.create({
   outlinedText: {
     ...baseStyles.text,
     color: COLORS.dark,
+  },
+  dangerButton: {
+    ...baseStyles.button,
+    backgroundColor: COLORS.danger,
+  },
+  dangerText: {
+    ...baseStyles.text,
+    color: COLORS.light,
   },
 });

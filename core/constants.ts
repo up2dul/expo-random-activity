@@ -5,6 +5,7 @@ export const COLORS = {
   light: '#f8f5f2',
   primary: '#eaddcf',
   paragraph: '#594a4e',
+  danger: '#f25042',
 };
 
 export const SIZES = {

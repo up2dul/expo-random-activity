@@ -36,12 +36,22 @@ export const useActivitiesStore = create<StoreState>()(set => ({
   },
   addSavedActivity: async () => {
     set(state => {
+      // if activity already exists, return state
+      if (
+        state.savedActivities.find(
+          a => a.activity === state.currentActivity?.activity,
+        )
+      ) {
+        return state;
+      }
       const updatedActivities = [
         state.currentActivity!,
         ...state.savedActivities,
       ];
       AsyncStorage.setItem(ACTIVITY_KEY, JSON.stringify(updatedActivities));
-      return { savedActivities: updatedActivities };
+      return {
+        savedActivities: updatedActivities,
+      };
     });
   },
   clearSavedActivities: async () => {

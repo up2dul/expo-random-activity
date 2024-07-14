@@ -1,27 +1,31 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { COLORS, SIZES } from '@/core/constants';
 import type { Activity } from '@/core/types';
 
-export const ActivityItem = ({ item }: { item: Activity }) => (
-  <View style={styles.itemContainer}>
-    <Text style={styles.itemText}>{item.activity}</Text>
-  </View>
-);
+export const ActivityItem = ({ item }: { item: Activity }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{item.activity}</Text>
+      <Text style={styles.subtitle}>{item.type}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: COLORS.primary,
+    padding: SIZES.sm,
+    borderRadius: 4,
+    marginBottom: SIZES.md,
   },
-  itemContainer: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  title: {
+    fontSize: SIZES.md,
+    fontWeight: 'bold',
+    color: COLORS.dark,
   },
-  itemText: {
-    fontSize: 16,
+  subtitle: {
+    fontSize: SIZES.sm,
+    color: COLORS.paragraph,
   },
 });
