@@ -7,13 +7,8 @@ import { COLORS, SIZES } from '@/core/constants';
 import { useActivitiesStore } from '@/stores/saved-activities';
 
 export default function Home() {
-  const {
-    isLoading,
-    currentActivity,
-    loadCurrentActivity,
-    addSavedActivity,
-    clearSavedActivities,
-  } = useActivitiesStore();
+  const { isLoading, currentActivity, loadCurrentActivity, addSavedActivity } =
+    useActivitiesStore();
 
   useEffect(() => {
     loadCurrentActivity();
@@ -47,9 +42,6 @@ export default function Home() {
         </Button>
         <Button variant="outlined" onPress={() => addSavedActivity()}>
           💾 Save this activity
-        </Button>
-        <Button variant="outlined" onPress={() => clearSavedActivities()}>
-          🗑️ Clear all
         </Button>
       </View>
     </View>
