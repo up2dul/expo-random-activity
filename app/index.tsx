@@ -37,7 +37,7 @@ export default function Home() {
       </View>
 
       <View style={styles.actionsSection}>
-        <Button isLoading={isLoading} onPress={() => loadCurrentActivity()}>
+        <Button disabled={isLoading} isLoading={isLoading} onPress={() => loadCurrentActivity()}>
           🎲 Re-generate
         </Button>
         <Button variant="outlined" onPress={() => addSavedActivity()}>
